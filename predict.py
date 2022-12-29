@@ -37,12 +37,13 @@ class Predictor(BasePredictor):
             description="Target language max score for language auto-detection. If detected score is higher than this value, it would override the guess to target_lang as opposed to using detected_lang.",
             default=None
         ),
-        label: List[str] = Input(description="A label for the logs.", default=None),
+        labels: List[str] = Input(description="A label for the logs.", default=None),
     ) -> List[str]:
         
         default_text_lang=None
         default_target_text_lang = "eng-Latn"
         default_target_lang_max_score = 0.9
+        default_label = "Text"
         
         if text_langs is None:
             text_langs = [default_text_lang] * len(texts)
@@ -50,6 +51,8 @@ class Predictor(BasePredictor):
             target_langs = [default_target_text_lang] * len(texts)
         if target_lang_max_scores is None:
             target_langs = [default_target_lang_max_score] * len(texts)
+        if labels is None:
+            labels = [default_label] * len(texts)
        
         if len(texts) != len(text_langs) or len(texts) != len(target_langs) or len(texts) != len(target_lang_max_scores):
             print("ERROR: texts, text_langs, target_langs, and target_lang_max_scores must be the same length!")
@@ -63,6 +66,7 @@ class Predictor(BasePredictor):
             text_lang = text_langs[i]
             target_lang = target_langs[i]
             target_lang_max_score = target_lang_max_scores[i]
+            label = labels[i]
             translated_text = translate_text(
                 text,
                 text_lang,
