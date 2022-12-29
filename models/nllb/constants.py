@@ -72,7 +72,6 @@ LANG_TO_FLORES = {
   "UKRAINIAN": "ukr_Cyrl",
   "URDU": "urd_Arab",
   "VIETNAMESE": "vie_Latn",
-  "WELSH": "cym_Latn",
   "XHOSA": "xho_Latn",
   "YORUBA": "yor_Latn",
   "ZULU": "zul_Latn",
