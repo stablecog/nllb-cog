@@ -38,7 +38,7 @@ class Predictor(BasePredictor):
             default=0.9
         ),
         label: str = Input(description="A label for the logs.", default="Text"),
-    ) -> List[Path]:
+    ) -> List[str]:
         output_paths = []
         translated_text = translate_text(
             text,
