@@ -31,7 +31,7 @@ class Predictor(BasePredictor):
     def predict(
         self,
         text: str = Input(description="Input text.", default=""),
-        text_lang: str = Input(description="Text language code (FLORES-200). It overrides the language auto-detection.", default=None),
+        text_lang: str = Input(description="Input text language code (FLORES-200). It overrides the language auto-detection.", default=None),
         target_lang: str = Input(description="Target language code (FLORES-200).", default="eng_Latn"),
         target_lang_max_score: float = Input(description="Target language max score.", default=0.9),
         label: str = Input(description="A label for the logs.", default="Text"),
