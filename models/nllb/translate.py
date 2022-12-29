@@ -1,7 +1,7 @@
 from lingua import Language
 import time
 from transformers import pipeline
-from .constants import LANG_TO_FLORES, FLORES_TO_LANG
+from .constants import LANG_TO_FLORES
 import torch
 
 
@@ -32,7 +32,7 @@ def translate_text(text, text_flores, target_flores, target_score_max, model, to
                 target_lang_score = curr[1]
                 
         if detected_lang is not None and LANG_TO_FLORES.get(detected_lang) != target_flores and (target_lang_score is None or target_lang_score < target_score_max) and LANG_TO_FLORES.get(detected_lang.name) is not None:
-            decided_text_flores = LANG_TO_FLORES[detected_lang.name]
+            decided_text_flores = LANG_TO_FLORES.get(detected_lang.name)
         
         if detected_lang is not None:
             print(f'-- {label} - Guessed text language: "{detected_lang.name}". Score: {detected_lang_score} --')
