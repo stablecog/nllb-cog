@@ -1,0 +1,7 @@
+.cog/
+__pycache__/
+diffusers-cache/
+.env
+.env.*
+!.env.example
+.DS_Store
