@@ -31,7 +31,7 @@ def translate_text(text, text_flores, target_flores, target_score_max, model, to
             if curr[0] == Language.ENGLISH:
                 target_lang_score = curr[1]
                 
-        if detected_lang is not None and detected_lang != FLORES_TO_LANG(target_flores) and (target_lang_score is None or target_lang_score < target_score_max) and LANG_TO_FLORES.get(detected_lang.name) is not None:
+        if detected_lang is not None and LANG_TO_FLORES.get(detected_lang) != target_flores and (target_lang_score is None or target_lang_score < target_score_max) and LANG_TO_FLORES.get(detected_lang.name) is not None:
             decided_text_flores = LANG_TO_FLORES[detected_lang.name]
         
         if detected_lang is not None:
