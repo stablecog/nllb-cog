@@ -51,7 +51,7 @@ def translate_text(text, text_flores, target_flores, target_score_max, model, to
             tgt_lang=target_flores,
             device=0
         )
-        translate_output = translate(text, max_length=500)
+        translate_output = translate(text, max_length=1000)
         translated_text = translate_output[0]['translation_text']
         print(f'-- {label} - Original text is: "{text}" --')
         print(f'-- {label} - Translated text is: "{translated_text}" --')
