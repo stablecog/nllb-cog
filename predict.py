@@ -33,7 +33,10 @@ class Predictor(BasePredictor):
         text: str = Input(description="Input text.", default=""),
         text_lang: str = Input(description="Input text language code (FLORES-200). It overrides the language auto-detection.", default=None),
         target_lang: str = Input(description="Target language code (FLORES-200).", default="eng_Latn"),
-        target_lang_max_score: float = Input(description="Target language max score.", default=0.9),
+        target_lang_max_score: float = Input(
+            description="Target language max score for language auto-detection. If detected score is higher than this value, it would override the guess to target_lang as opposed to using detected_lang.",
+            default=0.9
+        ),
         label: str = Input(description="A label for the logs.", default="Text"),
     ) -> List[Path]:
         output_paths = []
