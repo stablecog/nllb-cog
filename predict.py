@@ -78,7 +78,7 @@ class Predictor(BasePredictor):
         ),
         label_2: str = Input(description="#2 - A label for the logs.", default="Text"),
     ) -> List[str]:
-        output_strings = []
+        output_strings = ["test"]
         translated_text = translate_text(
             text=text,
             text_flores=text_flores,
