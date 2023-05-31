@@ -79,8 +79,9 @@ class Predictor(BasePredictor):
         ),
         label_2: str = Input(description="#2 - A label for the logs.", default="Text"),
     ) -> List[str]:
-        startTimeTranslation = time.time()
-        print(f"💬⏳ Translation started ⏳💬")
+        start = time.time()
+        print("//////////////////////////////////////////////////////////////////")
+        print(f"⏳💬 Translation started 💬⏳")
 
         output_strings = []
         translated_text = translate_text(
@@ -109,9 +110,8 @@ class Predictor(BasePredictor):
             )
             output_strings.append(translated_text_2)
 
-        endTimeTranslation = time.time()
-        print(
-            f"💬🟢 Translation completed in: {round((endTimeTranslation - startTimeTranslation), 2)} sec. 🟢💬"
-        )
+        end = time.time()
+        print(f"✅💬 Translation completed in: {round((end - start) * 1000)} ms 💬✅")
+        print("//////////////////////////////////////////////////////////////////")
 
         return output_strings
