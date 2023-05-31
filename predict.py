@@ -49,7 +49,7 @@ class Predictor(BasePredictor):
         target_lang: str = Input(
             description="Target language code (FLORES-200).", default=TARGET_LANG
         ),
-        target_lang_max_score: float = Input(
+        target_score_max: float = Input(
             description="Target language max score for language auto-detection. If detected score is higher than this value, it would override the guess to target_lang as opposed to using detected_lang.",
             default=TARGET_LANG_SCORE_MAX,
         ),
@@ -66,7 +66,7 @@ class Predictor(BasePredictor):
         target_lang_2: str = Input(
             description="#2 - Target language code (FLORES-200).", default=TARGET_LANG
         ),
-        target_lang_max_score_2: float = Input(
+        target_score_max_2: float = Input(
             description="#2 - Target language max score for language auto-detection. If detected score is higher than this value, it would override the guess to target_lang as opposed to using detected_lang.",
             default=TARGET_LANG_SCORE_MAX,
         ),
@@ -83,7 +83,7 @@ class Predictor(BasePredictor):
             target_lang=target_lang,
             target_flores=target_lang,
             detected_confidence_score_min=detected_confidence_score_min,
-            target_lang_max_score=target_lang_max_score,
+            target_score_max=target_score_max,
             model=self.translate_model,
             tokenizer=self.translate_tokenizer,
             detector=self.detect_language,
@@ -97,7 +97,7 @@ class Predictor(BasePredictor):
                 target_lang=target_lang_2,
                 target_flores=target_lang_2,
                 detected_confidence_score_min=detected_confidence_score_min_2,
-                target_lang_max_score=target_lang_max_score_2,
+                target_score_max=target_score_max_2,
                 model=self.translate_model,
                 tokenizer=self.translate_tokenizer,
                 detector=self.detect_language,
