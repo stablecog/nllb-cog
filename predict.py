@@ -3,7 +3,7 @@ from typing import List
 import torch
 from cog import BasePredictor, Input
 
-from transformers import AutoTokenizer, AutoModelForSeq2SeqLM, pipeline
+from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
 
 from models.nllb.constants import (
     TRANSLATOR_CACHE,
@@ -78,8 +78,8 @@ class Predictor(BasePredictor):
         ),
         label_2: str = Input(description="#2 - A label for the logs.", default="Text"),
     ) -> List[str]:
-        output_strings = ["test"]
-        """ translated_text = translate_text(
+        output_strings = []
+        translated_text = translate_text(
             text=text,
             text_flores=text_flores,
             target_flores=target_flores,
@@ -103,17 +103,5 @@ class Predictor(BasePredictor):
                 detector=self.detect_language,
                 label=label_2,
             )
-            output_strings.append(translated_text_2) """
-        translate = pipeline(
-            task="translation",
-            model=self.translate_model,
-            tokenizer=self.translate_tokenizer,
-            torch_dtype=torch.float16,
-            src_lang="tur_Latn",
-            tgt_lang="eng_Latn",
-            device=0,
-        )
-        translate_output = translate("bir kedi ağaçta oturuyordu.", max_length=1000)
-        translated_text = translate_output[0]["translation_text"]
-        output_strings.append(translated_text)
+            output_strings.append(translated_text_2)
         return output_strings
