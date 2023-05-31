@@ -9,8 +9,10 @@ from models.nllb.constants import (
     TRANSLATOR_CACHE,
     TOKENIZER_CACHE,
     TRANSLATOR_MODEL_ID,
+    TARGET_LANG_FLORES,
+    TARGET_LANG_SCORE_MAX,
+    DETECTED_CONFIDENCE_SCORE_MIN,
 )
-from models.nllb.classes import TranslationInput, TranslationOutput
 from models.nllb.translate import translate_text
 
 from lingua import LanguageDetectorBuilder
@@ -40,21 +42,66 @@ class Predictor(BasePredictor):
     @torch.cuda.amp.autocast()
     def predict(
         self,
-        text_objects: List[TranslationInput] = Input(
-            description="Translation inputs", default=[]
+        text_1: str = Input(description="Input text.", default=""),
+        text_flores_1: str = Input(
+            description="Input text language code (FLORES-200). It overrides the language auto-detection.",
+            default=None,
         ),
-    ) -> List[TranslationOutput]:
-        outputs: List[TranslationOutput] = []
-        for text_object in text_objects:
-            translated_text_object = translate_text(
-                text=text_object.original_text,
-                text_flores=text_object.text_flores,
-                target_flores=text_object.target_flores,
-                detected_confidence_score_min=text_object.detected_confidence_score_min,
-                target_score_max=text_object.target_score_max,
+        target_flores_1: str = Input(
+            description="Target language code (FLORES-200).", default=TARGET_LANG_FLORES
+        ),
+        target_score_max_1: float = Input(
+            description="Target language max score for language auto-detection. If detected score is higher than this value, it would override the guess to target_lang as opposed to using detected_lang.",
+            default=TARGET_LANG_SCORE_MAX,
+        ),
+        detected_confidence_score_min_1: float = Input(
+            description="#1 - Minimum confidence score for language auto-detection. If detected score is lower than this value, it would override the guess to target_lang as opposed to using detected_lang.",
+            default=DETECTED_CONFIDENCE_SCORE_MIN,
+        ),
+        label_1: str = Input(description="A label for the logs.", default="Text"),
+        text_2: str = Input(description="#2 - Input text.", default=None),
+        text_flores_2: str = Input(
+            description="#2 - Input text language code (FLORES-200). It overrides the language auto-detection.",
+            default=None,
+        ),
+        target_flores_2: str = Input(
+            description="#2 - Target language code (FLORES-200).",
+            default=TARGET_LANG_FLORES,
+        ),
+        target_score_max_2: float = Input(
+            description="#2 - Target language max score for language auto-detection. If detected score is higher than this value, it would override the guess to target_lang as opposed to using detected_lang.",
+            default=TARGET_LANG_SCORE_MAX,
+        ),
+        detected_confidence_score_min_2: float = Input(
+            description="#2 - Minimum confidence score for language auto-detection. If detected score is lower than this value, it would override the guess to target_lang as opposed to using detected_lang.",
+            default=DETECTED_CONFIDENCE_SCORE_MIN,
+        ),
+        label_2: str = Input(description="#2 - A label for the logs.", default="Text"),
+    ) -> List[str]:
+        output_strings = []
+        translated_text = translate_text(
+            text=text_1,
+            text_flores=text_flores_1,
+            target_flores=target_flores_1,
+            detected_confidence_score_min=detected_confidence_score_min_1,
+            target_score_max=target_score_max_1,
+            model=self.translate_model,
+            tokenizer=self.translate_tokenizer,
+            detector=self.detect_language,
+            label=label_1,
+        )
+        output_strings.append(translated_text)
+        if text_2 is not None:
+            translated_text_2 = translate_text(
+                text=text_2,
+                text_flores=text_flores_2,
+                target_flores=target_flores_2,
+                detected_confidence_score_min=detected_confidence_score_min_2,
+                target_score_max=target_score_max_2,
                 model=self.translate_model,
                 tokenizer=self.translate_tokenizer,
                 detector=self.detect_language,
+                label=label_2,
             )
-            outputs.append(translated_text_object)
-        return outputs
+            output_strings.append(translated_text_2)
+        return output_strings
