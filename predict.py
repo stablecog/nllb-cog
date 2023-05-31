@@ -105,7 +105,7 @@ class Predictor(BasePredictor):
             )
             output_strings.append(translated_text_2) """
         translate = pipeline(
-            "translation",
+            task="translation",
             model=self.translate_model,
             tokenizer=self.translate_tokenizer,
             torch_dtype=torch.float16,
@@ -113,7 +113,7 @@ class Predictor(BasePredictor):
             tgt_lang="eng_Latn",
             device=0,
         )
-        translate_output = translate(text, max_length=1000)
+        translate_output = translate("bir kedi ağaçta oturuyordu.", max_length=1000)
         translated_text = translate_output[0]["translation_text"]
         output_strings.append(translated_text)
         return output_strings
