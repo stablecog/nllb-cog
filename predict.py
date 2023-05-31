@@ -36,6 +36,7 @@ class Predictor(BasePredictor):
         self.translate_model = AutoModelForSeq2SeqLM.from_pretrained(
             TRANSLATOR_MODEL_ID, cache_dir=TRANSLATOR_CACHE
         )
+        self.translate_model = torch.compile(self.translate_model)
         print("Loaded translator!")
 
     @torch.inference_mode()
