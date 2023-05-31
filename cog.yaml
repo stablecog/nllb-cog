@@ -13,7 +13,7 @@ build:
     - "transformers==4.29.2"
     - "accelerate==0.19.0"
     - "bitsandbytes==0.39.0"
-    - "triton==2.0.0.post1"
+    - "triton==2.0.0"
     - "numpy==1.24.1"
     - "tqdm==4.65.0"
     - "timm==0.4.12"
