@@ -8,7 +8,7 @@ from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
 from models.nllb.constants import (
     TRANSLATOR_CACHE,
     TRANSLATOR_MODEL_ID,
-    TARGET_LANG,
+    TARGET_LANG_FLORES,
     TARGET_LANG_SCORE_MAX,
     DETECTED_CONFIDENCE_SCORE_MIN,
 )
@@ -42,12 +42,12 @@ class Predictor(BasePredictor):
     def predict(
         self,
         text: str = Input(description="Input text.", default=""),
-        text_lang: str = Input(
+        text_flores: str = Input(
             description="Input text language code (FLORES-200). It overrides the language auto-detection.",
             default=None,
         ),
-        target_lang: str = Input(
-            description="Target language code (FLORES-200).", default=TARGET_LANG
+        target_flores: str = Input(
+            description="Target language code (FLORES-200).", default=TARGET_LANG_FLORES
         ),
         target_score_max: float = Input(
             description="Target language max score for language auto-detection. If detected score is higher than this value, it would override the guess to target_lang as opposed to using detected_lang.",
@@ -59,12 +59,13 @@ class Predictor(BasePredictor):
         ),
         label: str = Input(description="A label for the logs.", default="Text"),
         text_2: str = Input(description="#2 - Input text.", default=None),
-        text_lang_2: str = Input(
+        text_flores_2: str = Input(
             description="#2 - Input text language code (FLORES-200). It overrides the language auto-detection.",
             default=None,
         ),
-        target_lang_2: str = Input(
-            description="#2 - Target language code (FLORES-200).", default=TARGET_LANG
+        target_flores_2: str = Input(
+            description="#2 - Target language code (FLORES-200).",
+            default=TARGET_LANG_FLORES,
         ),
         target_score_max_2: float = Input(
             description="#2 - Target language max score for language auto-detection. If detected score is higher than this value, it would override the guess to target_lang as opposed to using detected_lang.",
@@ -79,9 +80,8 @@ class Predictor(BasePredictor):
         output_strings = []
         translated_text = translate_text(
             text=text,
-            text_flores=text_lang,
-            target_lang=target_lang,
-            target_flores=target_lang,
+            text_flores=text_flores,
+            target_flores=target_flores,
             detected_confidence_score_min=detected_confidence_score_min,
             target_score_max=target_score_max,
             model=self.translate_model,
@@ -93,9 +93,8 @@ class Predictor(BasePredictor):
         if text_2 is not None:
             translated_text_2 = translate_text(
                 text=text_2,
-                text_flores=text_lang_2,
-                target_lang=target_lang_2,
-                target_flores=target_lang_2,
+                text_flores=text_flores_2,
+                target_flores=target_flores_2,
                 detected_confidence_score_min=detected_confidence_score_min_2,
                 target_score_max=target_score_max_2,
                 model=self.translate_model,

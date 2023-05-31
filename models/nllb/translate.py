@@ -1,9 +1,7 @@
 from lingua import Language
 import time
 from transformers import pipeline
-from .constants import (
-    LANG_TO_FLORES,
-)
+from .constants import LANG_TO_FLORES, FLORES_TO_LANG, TARGET_LANG
 import torch
 from tabulate import tabulate
 
@@ -11,7 +9,6 @@ from tabulate import tabulate
 def translate_text(
     text,
     text_flores,
-    target_lang,
     target_flores,
     target_score_max,
     detected_confidence_score_min,
@@ -28,7 +25,6 @@ def translate_text(
     decided_text_flores = get_flores(
         text=text,
         text_flores=text_flores,
-        target_lang=target_lang,
         target_flores=target_flores,
         target_score_max=target_score_max,
         detected_confidence_score_min=detected_confidence_score_min,
@@ -67,7 +63,6 @@ def translate_text(
 def get_flores(
     text,
     text_flores,
-    target_lang,
     target_flores,
     target_score_max,
     detected_confidence_score_min,
@@ -88,6 +83,10 @@ def get_flores(
     target_lang_score = None
     detected_lang = None
     detected_lang_score = None
+
+    target_lang = TARGET_LANG
+    if FLORES_TO_LANG.get(target_flores) is not None:
+        target_lang = FLORES_TO_LANG[target_flores]
 
     print(f"-- Confidence values --")
     print(tabulate(confidence_values[:5]))
