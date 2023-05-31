@@ -2,6 +2,7 @@ from typing import List
 
 import torch
 from cog import BasePredictor, Input
+import time
 
 from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
 
@@ -78,6 +79,9 @@ class Predictor(BasePredictor):
         ),
         label_2: str = Input(description="#2 - A label for the logs.", default="Text"),
     ) -> List[str]:
+        startTimeTranslation = time.time()
+        print(f"💬⏳ Translation started ⏳💬")
+
         output_strings = []
         translated_text = translate_text(
             text=text_1,
@@ -104,4 +108,10 @@ class Predictor(BasePredictor):
                 label=label_2,
             )
             output_strings.append(translated_text_2)
+
+        endTimeTranslation = time.time()
+        print(
+            f"💬🟢 Translation completed in: {round((endTimeTranslation - startTimeTranslation), 2)} sec. 🟢💬"
+        )
+
         return output_strings
