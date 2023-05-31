@@ -4,24 +4,31 @@ from transformers import pipeline
 from .constants import LANG_TO_FLORES, FLORES_TO_LANG, TARGET_LANG
 import torch
 from tabulate import tabulate
+from .classes import TranslationOutput
+from typing import Any, List
 
 
 def translate_text(
-    text,
-    text_flores,
-    target_flores,
-    target_score_max,
-    detected_confidence_score_min,
-    model,
-    tokenizer,
-    detector,
-    label,
-):
+    text: str,
+    text_flores: str | None,
+    target_flores: str,
+    target_score_max: float,
+    detected_confidence_score_min: float,
+    model: Any,
+    tokenizer: Any,
+    detector: Any,
+) -> TranslationOutput:
+    translated_text_object = TranslationOutput(
+        original_text=text,
+        original_text_guessed_flores=target_flores,
+        translated_text=text,
+        translated_text_flores=target_flores,
+    )
     if text == "":
-        print(f"-- {label} - No text to translate, skipping --")
-        return ""
+        print(f"-- No text to translate, skipping --")
+        return translated_text_object
     startTimeTranslation = time.time()
-    translated_text = ""
+    translated_text: str = ""
     decided_text_flores = get_flores(
         text=text,
         text_flores=text_flores,
@@ -29,8 +36,8 @@ def translate_text(
         target_score_max=target_score_max,
         detected_confidence_score_min=detected_confidence_score_min,
         detector=detector,
-        label=label,
     )
+    translated_text_object.original_text_guessed_flores = decided_text_flores
 
     if decided_text_flores != target_flores:
         translate = pipeline(
@@ -44,20 +51,17 @@ def translate_text(
         )
         translate_output = translate(text, max_length=1000)
         translated_text = translate_output[0]["translation_text"]
-        print(f'-- {label} - Original text is: "{text}" --')
-        print(f'-- {label} - Translated text is: "{translated_text}" --')
+        translated_text_object.translated_text = translated_text
+        print(f'-- Original text is: "{text}" --')
+        print(f'-- Translated text is: "{translated_text}" --')
     else:
-        translated_text = text
-        print(
-            f"-- {label} - Text is already in the correct language, no translation needed --"
-        )
+        print(f"-- Text is already in the correct language, no translation needed --")
 
     endTimeTranslation = time.time()
     print(
-        f"-- {label} - Completed in: {round((endTimeTranslation - startTimeTranslation), 2)} sec. --"
+        f"-- Completed in: {round((endTimeTranslation - startTimeTranslation), 2)} sec. --"
     )
-
-    return translated_text
+    return translated_text_object
 
 
 def get_flores(
@@ -67,14 +71,13 @@ def get_flores(
     target_score_max,
     detected_confidence_score_min,
     detector,
-    label,
 ):
     if text == "":
-        print(f"-- {label} - No text to give FLORES-200 for, skipping --")
+        print(f"-- No text to give FLORES-200 for, skipping --")
         return target_flores
     if text_flores is not None and text_flores != "":
         print(
-            f'-- {label} - FLORES-200 code is given, skipping language auto-detection: "{text_flores}" --'
+            f'-- FLORES-200 code is given, skipping language auto-detection: "{text_flores}" --'
         )
         return text_flores
 
@@ -110,14 +113,14 @@ def get_flores(
 
     if detected_lang is not None:
         print(
-            f'-- {label} - Guessed text language: "{detected_lang.name}". Score: {detected_lang_score} --'
+            f'-- Guessed text language: "{detected_lang.name}". Score: {detected_lang_score} --'
         )
     if (
         detected_lang is not None
         and target_lang_score is not None
         and detected_lang != target_lang
     ):
-        print(f"-- {label} - Target language score: {target_lang_score} --")
+        print(f"-- Target language score: {target_lang_score} --")
 
-    print(f'-- {label} - Selected text language FLORES-200: "{text_lang_flores}" --')
+    print(f'-- Selected text language FLORES-200: "{text_lang_flores}" --')
     return text_lang_flores
