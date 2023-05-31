@@ -6,8 +6,7 @@ from cog import BasePredictor, Input
 from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
 
 from models.nllb.constants import (
-    TRANSLATOR_MODEL_CACHE,
-    TRANSLATOR_TOKENIZER_CACHE,
+    TRANSLATOR_CACHE,
     TRANSLATOR_MODEL_ID,
     TARGET_LANG,
     TARGET_LANG_SCORE_MAX,
@@ -31,10 +30,10 @@ class Predictor(BasePredictor):
 
         print("Loading translator...")
         self.translate_tokenizer = AutoTokenizer.from_pretrained(
-            TRANSLATOR_MODEL_ID, cache_dir=TRANSLATOR_TOKENIZER_CACHE
+            TRANSLATOR_MODEL_ID, cache_dir=TRANSLATOR_CACHE
         )
         self.translate_model = AutoModelForSeq2SeqLM.from_pretrained(
-            TRANSLATOR_MODEL_ID, cache_dir=TRANSLATOR_MODEL_CACHE
+            TRANSLATOR_MODEL_ID, cache_dir=TRANSLATOR_CACHE
         )
         print("Loaded translator!")
 
