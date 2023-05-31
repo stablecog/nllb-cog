@@ -2,6 +2,7 @@ from lingua import Language
 
 TRANSLATOR_MODEL_ID = "facebook/nllb-200-distilled-1.3B"
 TRANSLATOR_CACHE = "translator-cache"
+TOKENIZER_CACHE = "tokenizer-cache"
 
 LANG_TO_FLORES = {
     "AFRIKAANS": "afr_Latn",
