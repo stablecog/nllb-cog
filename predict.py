@@ -3,6 +3,7 @@ from typing import List
 import torch
 from cog import BasePredictor, Input
 import time
+import os
 
 from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
 
@@ -21,6 +22,8 @@ from lingua import LanguageDetectorBuilder
 
 class Predictor(BasePredictor):
     def setup(self):
+        os.system("socat TCP6-LISTEN:8888,fork TCP4:127.0.0.1:5000 &")
+
         """Load the model into memory to make running multiple predictions efficient"""
         print("Loading language detector...")
         self.detect_language = (
