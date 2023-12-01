@@ -84,6 +84,8 @@ def get_flores(
     detected_lang = None
     detected_lang_score = None
 
+    print(confidence_values)
+
     target_lang = TARGET_LANG
     if FLORES_TO_LANG.get(target_flores) is not None:
         target_lang = FLORES_TO_LANG[target_flores]
