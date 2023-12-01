@@ -80,6 +80,7 @@ def get_flores(
 
     text_lang_flores = target_flores
     confidence_values = detector.compute_language_confidence_values(text)
+    confidence_values = [[cv.language, cv.value] for cv in confidence_values]
     target_lang_score = None
     detected_lang = None
     detected_lang_score = None
@@ -89,8 +90,7 @@ def get_flores(
         target_lang = FLORES_TO_LANG[target_flores]
 
     print(f"-- Confidence values --")
-    formatted_data = [[cv.language, cv.value] for cv in confidence_values]
-    print(tabulate(formatted_data[:5]))
+    print(tabulate(confidence_values[:5]))
 
     for index in range(len(confidence_values)):
         curr = confidence_values[index]
