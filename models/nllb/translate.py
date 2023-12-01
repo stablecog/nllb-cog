@@ -84,14 +84,13 @@ def get_flores(
     detected_lang = None
     detected_lang_score = None
 
-    print(confidence_values)
-
     target_lang = TARGET_LANG
     if FLORES_TO_LANG.get(target_flores) is not None:
         target_lang = FLORES_TO_LANG[target_flores]
 
     print(f"-- Confidence values --")
-    print(tabulate(confidence_values[:5]))
+    formatted_data = [[cv.language, cv.value] for cv in confidence_values]
+    print(tabulate(formatted_data[:5]))
 
     for index in range(len(confidence_values)):
         curr = confidence_values[index]
