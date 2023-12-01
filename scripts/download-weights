@@ -3,15 +3,14 @@
 from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
 
 TRANSLATOR_MODEL_ID = "facebook/nllb-200-distilled-1.3B"
-TRANSLATOR_MODEL_CACHE = "translator-model-cache"
-TRANSLATOR_TOKENIZER_CACHE = "translator-tokenizer-cache"
+TRANSLATOR_MODEL_CACHE = "/app/data/translator-model-cache"
+TRANSLATOR_TOKENIZER_CACHE = "/app/data/translator-tokenizer-cache"
 
 # For the translator
 print("Downloading translation models...")
-translate_tokenizer = AutoTokenizer.from_pretrained(TRANSLATOR_MODEL_ID,  cache_dir=TRANSLATOR_TOKENIZER_CACHE)
-translate_model = AutoModelForSeq2SeqLM.from_pretrained(
-    TRANSLATOR_MODEL_ID,
-    cache_dir=TRANSLATOR_MODEL_CACHE
+translate_tokenizer = AutoTokenizer.from_pretrained(
+    TRANSLATOR_MODEL_ID, cache_dir=TRANSLATOR_TOKENIZER_CACHE
 )
-
-        
+translate_model = AutoModelForSeq2SeqLM.from_pretrained(
+    TRANSLATOR_MODEL_ID, cache_dir=TRANSLATOR_MODEL_CACHE
+)
